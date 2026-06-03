@@ -20,8 +20,6 @@ createAdmin();
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5173',
   'https://rayna-store-fe.vercel.app'
 ];
 
@@ -30,7 +28,21 @@ if (process.env.FRONTEND_URL) {
 }
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+
+    const isAllowed = allowedOrigins.includes(origin) || 
+                      origin.endsWith('.vercel.app') || 
+                      /^https?:\/\/localhost(:\d+)?$/i.test(origin) ||
+                      /^https?:\/\/127\.0\.0\.1(:\d+)?$/i.test(origin);
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
