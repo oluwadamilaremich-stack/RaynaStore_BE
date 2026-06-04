@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
     const { name, price, description, category, stock } = req.body;
     
     // If a file was uploaded, use its path as the imageUrl
-    const imageUrl = req.file ? `/${req.file.path.replace(/\\/g, '/')}` : req.body.imageUrl;
+    const imageUrl = req.file ? req.file.path : req.body.imageUrl;
 
     const product = new Product({
       name,
@@ -91,7 +91,7 @@ try {
     
     // Update imageUrl if a new file is uploaded
     if (req.file) {
-      product.imageUrl = `/${req.file.path.replace(/\\/g, '/')}`;
+      product.imageUrl = req.file.path;
     } else if (req.body.imageUrl) {
       product.imageUrl = req.body.imageUrl;
     }

@@ -78,7 +78,7 @@ const updateUserProfile = async (req, res) => {
       user.postalCode = req.body.postalCode || user.postalCode;
       
       if (req.file) {
-        user.avatarUrl = `/${req.file.path.replace(/\\/g, '/')}`;
+        user.avatarUrl = req.file.path;
       } else {
         user.avatarUrl = req.body.avatarUrl || user.avatarUrl;
       }
