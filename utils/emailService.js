@@ -32,21 +32,6 @@ const sendEmail = async ({ to, subject, htmlContent }) => {
   }
 };
 
-const sendWelcomeEmail = async (userEmail, userName) => {
-  const subject = 'Welcome to Rayna Store!';
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-      <h2 style="color: #207A6C;">Welcome, ${userName}!</h2>
-      <p>Thank you for creating an account with <strong>Rayna Store</strong>. We are excited to have you with us.</p>
-      <p>You can now explore our collections and enjoy a seamless shopping experience.</p>
-      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #888; font-size: 12px;">
-        This is an automated message, please do not reply.
-      </div>
-    </div>
-  `;
-  return sendEmail({ to: userEmail, subject, htmlContent });
-};
-
 const sendOrderNotification = async (order, isAdmin = false) => {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@rayna.com';
   const recipient = isAdmin ? adminEmail : order.customerEmail;
@@ -96,6 +81,5 @@ const sendOrderNotification = async (order, isAdmin = false) => {
 };
 
 module.exports = {
-  sendWelcomeEmail,
   sendOrderNotification,
 };

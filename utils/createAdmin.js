@@ -13,14 +13,25 @@ const createAdmin = async () => {
         email: adminEmail,
         password: adminPassword,
         isAdmin: true,
+        isVerified: true,
+        role: 'admin',
       });
-      console.log('Super Admin created successfully');
+      console.log('Super Admin created successfully and verified');
     } else {
-      // Ensure the existing user is an admin
+      // Ensure the existing user is an admin and verified
+      let updated = false;
       if (!adminExists.isAdmin) {
         adminExists.isAdmin = true;
+        adminExists.role = 'admin';
+        updated = true;
+      }
+      if (!adminExists.isVerified) {
+        adminExists.isVerified = true;
+        updated = true;
+      }
+      if (updated) {
         await adminExists.save();
-        console.log('Existing user promoted to Admin');
+        console.log('Existing Super Admin updated with verification and role');
       }
     }
   } catch (error) {

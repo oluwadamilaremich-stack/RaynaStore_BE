@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
     },
     password: {
       type: String,
@@ -66,6 +67,14 @@ const userSchema = mongoose.Schema(
       type: String,
       default: '',
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: String,
+    otpExpire: Date,
+    resetOtp: String,
+    resetOtpExpire: Date,
     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,

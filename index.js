@@ -36,7 +36,10 @@ app.use(cors({
     const isAllowed = allowedOrigins.includes(origin) || 
                       origin.endsWith('.vercel.app') || 
                       /^https?:\/\/localhost(:\d+)?$/i.test(origin) ||
-                      /^https?:\/\/127\.0\.0\.1(:\d+)?$/i.test(origin);
+                      /^https?:\/\/127\.0\.0\.1(:\d+)?$/i.test(origin) ||
+                      /^https?:\/\/192\.168\.\d+\.\d+(:\d+)?$/i.test(origin) ||
+                      /^https?:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/i.test(origin) ||
+                      /^https?:\/\/172\.(1[6-9]|2\d|3[01])\.\d+\.\d+(:\d+)?$/i.test(origin);
 
     if (isAllowed) {
       callback(null, true);

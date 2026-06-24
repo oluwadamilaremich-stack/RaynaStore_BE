@@ -11,18 +11,47 @@ const getDashboardStats = async (req, res) => {
     status: { $in: ['processing', 'out_for_delivery'] },
   });
 
-  const paidOrders = await Order.find({ paymentStatus: 'Paid' });
-  const totalRevenue = paidOrders.reduce((acc, order) => acc + order.totalAmount, 0);
+  const allOrders = await Order.find({ paymentStatus: 'Paid' });
+  const totalRevenue = allOrders.reduce((acc, order) => acc + order.totalAmount, 0);
 
   const pendingDeliveries = await Order.countDocuments({
     status: 'out_for_delivery',
   });
+
+  // Monthly Sales Data (Current Year)
+  const currentYear = new Date().getFullYear();
+  const monthlySales = Array(12).fill(0);
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  // Revenue Comparison (Current vs Previous Year)
+  const previousYear = currentYear - 1;
+  const comparisonData = monthNames.map(name => ({ name, current: 0, previous: 0 }));
+
+  allOrders.forEach(order => {
+    const orderDate = new Date(order.createdAt);
+    const orderYear = orderDate.getFullYear();
+    const orderMonth = orderDate.getMonth();
+
+    if (orderYear === currentYear) {
+      monthlySales[orderMonth] += order.totalAmount;
+      comparisonData[orderMonth].current += order.totalAmount;
+    } else if (orderYear === previousYear) {
+      comparisonData[orderMonth].previous += order.totalAmount;
+    }
+  });
+
+  const formattedMonthlySales = monthNames.map((name, index) => ({
+    name,
+    value: monthlySales[index]
+  }));
 
   res.json({
     totalUsers,
     activeOrders,
     totalRevenue,
     pendingDeliveries,
+    monthlySales: formattedMonthlySales,
+    comparisonData
   });
 };
 

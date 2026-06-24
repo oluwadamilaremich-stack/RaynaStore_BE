@@ -27,8 +27,10 @@ const run = async () => {
     }
 
     user.isAdmin = true;
+    user.isVerified = true;
+    user.role = 'admin';
     await user.save();
-    console.log(`Success! User "${user.name}" (${user.email}) is now an admin!`);
+    console.log(`Success! User "${user.name}" (${user.email}) is now a verified admin!`);
   } catch (err) {
     console.error('Error running script:', err);
   } finally {
