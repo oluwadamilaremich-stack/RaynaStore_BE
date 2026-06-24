@@ -289,6 +289,7 @@ const createUser = async (req, res) => {
       password,
       role: role || 'customer',
       isAdmin: isAdmin || false,
+      isVerified: true,
     });
 
     if (user) {
